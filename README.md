@@ -1,16 +1,16 @@
-# Ronny's Military Workout v2.0
+# Ronny's Military Workout v2.1
 
-Upload all files in this folder to the root of your GitHub repository and replace the existing files.
+Updates from the first real workout test:
 
-Included:
-- New blue and silver branding
-- Splash screen
-- Six complete Week 1 workouts
-- Animated exercise demonstrations
-- Live target muscle map
-- Voice countdowns
-- Local progress tracking
-- 12-week program structure
-- Updated installable PWA icons
+- Two workout rounds for a 10 to 12 minute session
+- 15 second rest between exercises
+- 30 second rest between rounds
+- Spoken and visual 3, 2, 1 countdown
+- Large pause and resume button
+- Stop Mission confirmation
+- More detailed exercise coaching
+- Expanded Dead Bug instructions
+- Improved start and movement illustrations
+- Updated offline cache
 
-Note: Exercise demonstrations are animated placeholders, not filmed videos.
+Upload every file to the root of the GitHub repository and replace the existing files.

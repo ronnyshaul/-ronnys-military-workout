@@ -102,3 +102,31 @@ textarea{min-height:90px}
 .splash img{width:min(80vw,380px);border-radius:28px;box-shadow:0 0 45px rgba(21,116,255,.35);animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(.98);filter:brightness(.9)}50%{transform:scale(1.02);filter:brightness(1.1)}}
 @keyframes splashOut{to{opacity:0;visibility:hidden}}
+
+.premium-demo{height:270px;border-radius:22px;background:radial-gradient(circle at center,#163b70,#07101e 72%);border:1px solid #28558b;display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;padding:14px;margin-bottom:16px;overflow:hidden}
+.demo-panel{height:230px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.01));display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(120,190,255,.18)}
+.demo-panel span{font-size:10px;letter-spacing:.16em;font-weight:900;color:#8fc7ff}
+.demo-panel svg{width:100%;height:195px}
+.athlete{fill:#b9d9ff;stroke:#4b9cff;stroke-width:2;filter:drop-shadow(0 0 8px rgba(21,116,255,.55));transform-origin:75px 110px}
+.motion-arrow{text-align:center;color:#5db2ff;font-size:24px}
+.demo-squat .pose-end{transform:translateY(28px) scaleY(.86)}
+.demo-lunge .pose-end{transform:translate(12px,18px) rotate(5deg)}
+.demo-pushup .athlete,.demo-plank .athlete{transform:rotate(90deg) translate(20px,-8px) scale(.85)}
+.demo-pushup .pose-end{transform:rotate(90deg) translate(38px,-8px) scale(.85)}
+.demo-bridge .athlete{transform:rotate(90deg) translate(22px,-8px) scale(.85)}
+.demo-bridge .pose-end{transform:rotate(90deg) translate(10px,-20px) scale(.85)}
+.demo-press .pose-end path:nth-of-type(2),.demo-press .pose-end path:nth-of-type(3){transform:translateY(-22px)}
+.demo-row .pose-end{transform:rotate(12deg) translateY(8px)}
+.demo-curl .pose-end path:nth-of-type(2),.demo-curl .pose-end path:nth-of-type(3){transform:rotate(-18deg);transform-origin:75px 72px}
+.demo-highknees .pose-end path:nth-of-type(4){transform:rotate(-38deg);transform-origin:75px 132px}
+.demo-burpee .pose-end{transform:rotate(72deg) translate(30px,-20px) scale(.8)}
+.pause-main{width:100%;margin-top:16px;padding:18px;border:none;border-radius:18px;font-weight:950;letter-spacing:.06em;background:linear-gradient(180deg,#f2f6fb,#aebdce);color:#07101c;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.pause-main.paused{background:linear-gradient(180deg,#38a1ff,#1265da);color:white;animation:pulsePause 1.3s ease-in-out infinite}
+@keyframes pulsePause{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+.countdown-final{color:#ffcf4a;text-shadow:0 0 20px rgba(255,207,74,.55);animation:countPulse .75s ease-in-out infinite}
+@keyframes countPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.rest-screen{min-height:260px;border-radius:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at center,#12335d,#07101e 70%);border:1px solid #234c7c;margin-bottom:14px;padding:24px}
+.coaching-card h3{margin:18px 0 6px;color:#8fc7ff}
+.coaching-card h3:first-child{margin-top:0}
+.coaching-card ol{margin:0;padding-left:22px;color:#dbe7f5}
+.coaching-card li{margin-bottom:8px;line-height:1.45}

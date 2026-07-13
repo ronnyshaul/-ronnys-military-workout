@@ -49,7 +49,99 @@ const workouts = [
     ex("Fast March",40,"highknees","Drive arms and knees at a steady pace.","Endurance","Do not slouch.","Easy march","High knees")
   ]}
 ];
-function ex(name,seconds,demo,form,muscles,mistake,easier,harder){return {name,seconds,demo,form,muscles,mistake,easier,harder,bodyParts:inferBodyParts(name,muscles)}}
+function ex(name,seconds,demo,form,muscles,mistake,easier,harder){
+  return {
+    name,seconds,demo,form,muscles,mistake,easier,harder,
+    bodyParts:inferBodyParts(name,muscles),
+    coaching:exerciseCoaching(name,form,muscles)
+  }
+}
+function exerciseCoaching(name,form,muscles){
+  const key=name.toLowerCase();
+  const library={
+    "dead bug":{
+      purpose:"Build deep core control and teach your abdominal muscles to stabilize your spine while your arms and legs move.",
+      setup:"Lie on your back. Point both arms toward the ceiling. Bend your hips and knees to about 90 degrees. Gently press your lower back into the floor.",
+      steps:[
+        "Tighten your stomach as though someone is about to tap you in the abdomen.",
+        "Slowly lower your right arm behind your head while extending your left leg.",
+        "Stop before your lower back lifts from the floor.",
+        "Return to the starting position, then repeat with the opposite arm and leg."
+      ],
+      feel:"You should feel your abdominal muscles working. You should not feel pressure or pain in your lower back."
+    },
+    "push-ups":{
+      purpose:"Build strength in your chest, triceps, front shoulders, and core.",
+      setup:"Place your hands slightly wider than shoulder width. Keep your body in one straight line from head to heels.",
+      steps:["Lower your chest toward the floor with control.","Keep your elbows angled slightly backward.","Press the floor away until your arms are straight."],
+      feel:"You should feel your chest, triceps, front shoulders, and abdominal muscles."
+    },
+    "plank shoulder taps":{
+      purpose:"Build core stability while strengthening your shoulders.",
+      setup:"Begin in a high plank with your feet slightly wider than hip width.",
+      steps:["Brace your core.","Lift one hand and tap the opposite shoulder.","Place the hand down and repeat on the other side.","Keep your hips as still as possible."],
+      feel:"You should feel your abs and shoulders working."
+    },
+    "dumbbell shoulder press":{
+      purpose:"Build shoulder and triceps strength.",
+      setup:"Stand tall with one 10 lb dumbbell in each hand at shoulder height.",
+      steps:["Tighten your core.","Press both dumbbells overhead.","Finish with your arms straight without locking the elbows.","Lower the dumbbells slowly to shoulder height."],
+      feel:"You should feel your shoulders and triceps."
+    },
+    "march in place":{
+      purpose:"Warm up your body and prepare your hips, legs, and core.",
+      setup:"Stand tall with your feet under your hips.",
+      steps:["Lift one knee toward hip height.","Swing the opposite arm naturally.","Alternate sides at a steady pace."],
+      feel:"You should feel warm and slightly out of breath."
+    },
+    "push-up hold":{
+      purpose:"Increase chest, triceps, shoulder, and core endurance.",
+      setup:"Begin in a strong push-up position.",
+      steps:["Lower about halfway toward the floor.","Hold your body in one straight line.","Keep breathing while maintaining tension."],
+      feel:"You should feel your chest, triceps, shoulders, and core working."
+    }
+  };
+  return library[key] || {
+    purpose:`Train your ${muscles.toLowerCase()} with controlled movement and proper form.`,
+    setup:"Start in the position shown. Stand or lie tall, brace your core, and prepare to move with control.",
+    steps:[form,"Move slowly enough to maintain control.","Return to the starting position and repeat."],
+    feel:`You should mainly feel your ${muscles.toLowerCase()} working. Stop if you feel sharp pain.`
+  };
+}
+function exerciseVisual(e){
+  const pose=e.demo;
+  const horizontal=["pushup","plank","bridge"].includes(pose);
+  const poseClass=horizontal?"horizontal":"standing";
+  return `<div class="premium-demo ${poseClass} demo-${pose}">
+    <div class="demo-panel">
+      <span>START</span>
+      <svg viewBox="0 0 150 210" aria-label="${e.name} starting position">
+        <g class="athlete pose-start">
+          <circle cx="75" cy="28" r="16"/>
+          <path d="M64 47 Q75 40 86 47 L91 105 Q83 121 75 129 Q67 121 59 105Z"/>
+          <path d="M61 58 L34 103 L44 110 L70 75Z"/>
+          <path d="M89 58 L116 103 L106 110 L80 75Z"/>
+          <path d="M68 124 L50 190 L64 194 L77 137Z"/>
+          <path d="M82 124 L100 190 L86 194 L73 137Z"/>
+        </g>
+      </svg>
+    </div>
+    <div class="motion-arrow">➜</div>
+    <div class="demo-panel">
+      <span>MOVE</span>
+      <svg viewBox="0 0 150 210" aria-label="${e.name} movement position">
+        <g class="athlete pose-end">
+          <circle cx="75" cy="28" r="16"/>
+          <path d="M64 47 Q75 40 86 47 L91 105 Q83 121 75 129 Q67 121 59 105Z"/>
+          <path d="M61 58 L34 103 L44 110 L70 75Z"/>
+          <path d="M89 58 L116 103 L106 110 L80 75Z"/>
+          <path d="M68 124 L50 190 L64 194 L77 137Z"/>
+          <path d="M82 124 L100 190 L86 194 L73 137Z"/>
+        </g>
+      </svg>
+    </div>
+  </div>`;
+}
 function inferBodyParts(name,muscles){
   const t=`${name} ${muscles}`.toLowerCase(),p=new Set();
   if(/chest|push-up|floor press/.test(t)) p.add("chest");
@@ -110,7 +202,7 @@ function navBtn(tab,icon,label){return `<button class="nav-btn ${state.tab===tab
 function tabView(){if(state.tab==="program")return programView();if(state.tab==="progress")return progressView();if(state.tab==="settings")return settingsView();return todayView()}
 function todayView(){
  const w=currentWorkout();
- return `<section class="hero"><div class="hero-media"><img src="brand-logo.png" alt=""></div><div class="hero-content"><div class="eyebrow">Daily mission</div><h1>${w.title}</h1><p class="muted">${w.focus}</p><div class="stats"><div class="stat"><span class="muted small">Time</span><strong>${w.duration}m</strong></div><div class="stat"><span class="muted small">Week</span><strong>${state.week}</strong></div><div class="stat"><span class="muted small">Day</span><strong>${state.day}</strong></div></div><button class="primary" id="start">BEGIN MISSION</button></div></section>
+ return `<section class="hero"><div class="hero-media"><img src="brand-logo.png" alt=""></div><div class="hero-content"><div class="eyebrow">Daily mission</div><h1>${w.title}</h1><p class="muted">${w.focus}</p><div class="stats"><div class="stat"><span class="muted small">Time</span><strong>10-12m</strong></div><div class="stat"><span class="muted small">Week</span><strong>${state.week}</strong></div><div class="stat"><span class="muted small">Day</span><strong>${state.day}</strong></div></div><button class="primary" id="start">BEGIN MISSION</button></div></section>
  <section class="section"><div class="row"><h2>Mission briefing</h2><span class="tag">Intermediate</span></div><div class="card"><p><strong>Objective:</strong> Build strength, conditioning, and consistency in under 15 minutes.</p><p class="muted small">Equipment: bodyweight and optional 10 lb dumbbells.</p></div><div class="week-grid">${[1,2,3,4,5,6,7].map(d=>`<div class="day-dot ${state.completed.includes(`${state.week}-${d}`)?"done":""} ${d===state.day?"today":""}">D${d}</div>`).join("")}</div></section>
  <section class="section"><h2>Target muscles</h2>${bodyMap(w.exercises.flatMap(e=>e.bodyParts).filter((v,i,a)=>a.indexOf(v)===i))}</section>
  <section class="section"><h2>Today's exercises</h2>${w.exercises.map((e,i)=>exerciseCard(e,i)).join("")}</section>`;
@@ -119,11 +211,110 @@ function exerciseCard(e,i){return `<div class="card"><div class="row"><div><stro
 function programView(){return `<section class="hero"><div class="hero-content" style="margin-top:0"><div class="eyebrow">12 week campaign</div><h1>Program map</h1><p class="muted">Weeks 1 to 4 foundation, Weeks 5 to 8 strength and conditioning, Weeks 9 to 12 military performance.</p></div></section><section class="section">${Array.from({length:12},(_,i)=>i+1).map(w=>`<div class="card"><div class="row"><div><strong>Week ${w}</strong><div class="muted small">${w<=4?"Foundation":w<=8?"Strength and conditioning":"Military performance"}</div></div><button class="secondary" data-week="${w}" style="width:auto;padding:10px 14px">${w===state.week?"Active":"Select"}</button></div></div>`).join("")}</section>`}
 function progressView(){const pct=Math.min(100,Math.round(state.completed.length/72*100));return `<section class="hero"><div class="hero-content" style="margin-top:0"><div class="eyebrow">Performance report</div><h1>${state.completed.length} missions complete</h1><p class="muted">Current rank: ${rank()}</p><div class="progressbar"><div style="width:${pct}%"></div></div><p class="small muted" style="margin-top:8px">${pct}% of the 12-week campaign</p></div></section><section class="section"><div class="stats"><div class="stat"><span class="muted small">Streak</span><strong>${state.completed.length}</strong></div><div class="stat"><span class="muted small">Weeks</span><strong>${Math.floor(state.completed.length/6)}</strong></div><div class="stat"><span class="muted small">Score</span><strong>${score()}</strong></div></div><div class="card"><label>Training notes</label><textarea id="notes" placeholder="Energy, soreness, results...">${state.notes}</textarea></div></section>`}
 function settingsView(){return `<section class="hero"><div class="hero-content" style="margin-top:0"><div class="eyebrow">Preferences</div><h1>Settings</h1><p class="muted">Adjust how your missions run.</p></div></section><section class="section"><div class="card row"><div><strong>Sound coach</strong><div class="muted small">Countdown and transitions</div></div><input id="sound" type="checkbox" ${state.sound?"checked":""} style="width:auto"></div><div class="card row"><div><strong>Vibration</strong><div class="muted small">Exercise change alerts</div></div><input id="vibration" type="checkbox" ${state.vibration?"checked":""} style="width:auto"></div><div class="card notice"><strong>Safety notice:</strong> Stop if you feel sharp pain, dizziness, chest pain, or unusual shortness of breath. Exercise within your ability and speak with a qualified medical professional if you have health concerns.</div><button class="danger" id="reset">RESET PROGRESS</button></section>`}
-function playerView(){const p=state.player,w=p.workout,e=w.exercises[p.index];return `<section><div class="row"><button class="secondary" id="exit" style="width:auto;padding:10px 14px">Exit</button><span class="tag">Exercise ${p.index+1}/${w.exercises.length}</span></div><div class="exercise-demo demo-${e.demo}"><div class="stick"><div class="head"></div><div class="body"></div><div class="arm left"></div><div class="arm right"></div><div class="leg left"></div><div class="leg right"></div></div></div><div class="eyebrow">Current exercise</div><h1>${e.name}</h1><p class="muted">${e.form}</p><div class="timer">${String(p.remaining).padStart(2,"0")}</div><div class="progressbar"><div style="width:${100-(p.remaining/e.seconds*100)}%"></div></div>${bodyMap(e.bodyParts)}<div class="controls" style="margin-top:14px"><button class="secondary" id="back">Back</button><button class="primary" id="pause">${p.paused?"Resume":"Pause"}</button><button class="secondary" id="skip">Skip</button></div><div class="card" style="margin-top:16px"><p class="small"><strong>Avoid:</strong> ${e.mistake}</p><p class="small"><strong>Easier:</strong> ${e.easier}</p><p class="small"><strong>Harder:</strong> ${e.harder}</p></div></section>`}
+function playerView(){
+  const p=state.player,w=p.workout,e=w.exercises[p.index];
+  const isRest=p.phase==="rest";
+  const interval=isRest?(p.index>=w.exercises.length-1?30:p.restDuration):e.seconds;
+  const nextName=p.index>=w.exercises.length-1?w.exercises[0].name:w.exercises[p.index+1].name;
+  return `<section>
+    <div class="row">
+      <button class="secondary" id="exit" style="width:auto;padding:10px 14px">Stop Mission</button>
+      <span class="tag">Round ${p.round}/${p.totalRounds}</span>
+    </div>
+    ${isRest?`
+      <div class="rest-screen">
+        <div class="eyebrow">Recovery interval</div>
+        <h1>Rest</h1>
+        <p class="muted">Next exercise: ${nextName}</p>
+      </div>
+    `:`
+      ${exerciseVisual(e)}
+      <div class="eyebrow">Exercise ${p.index+1} of ${w.exercises.length}</div>
+      <h1>${e.name}</h1>
+      <p class="muted">${e.form}</p>
+    `}
+    <div class="timer ${p.remaining<=3?"countdown-final":""}">${String(p.remaining).padStart(2,"0")}</div>
+    <div class="progressbar"><div style="width:${100-(p.remaining/interval*100)}%"></div></div>
+    <button class="pause-main ${p.paused?"paused":""}" id="pause">${p.paused?"RESUME EXERCISE":"PAUSE EXERCISE"}</button>
+    <div class="controls" style="margin-top:10px">
+      <button class="secondary" id="back">Back</button>
+      <button class="secondary" id="skip">${isRest?"Skip Rest":"Skip Exercise"}</button>
+      <button class="secondary" id="details">Instructions</button>
+    </div>
+    ${!isRest?`
+      ${bodyMap(e.bodyParts)}
+      <div class="card coaching-card" id="coaching">
+        <h3>Why you are doing this</h3>
+        <p>${e.coaching.purpose}</p>
+        <h3>Starting position</h3>
+        <p>${e.coaching.setup}</p>
+        <h3>How to perform it</h3>
+        <ol>${e.coaching.steps.map(step=>`<li>${step}</li>`).join("")}</ol>
+        <h3>What you should feel</h3>
+        <p>${e.coaching.feel}</p>
+        <p class="small"><strong>Common mistake:</strong> ${e.mistake}</p>
+        <p class="small"><strong>Easier version:</strong> ${e.easier}</p>
+        <p class="small"><strong>Harder version:</strong> ${e.harder}</p>
+      </div>
+    `:""}
+  </section>`;
+}
 function speak(text){if(!state.sound||!("speechSynthesis"in window))return;speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(text))}
-function startPlayer(){const w=currentWorkout();state.player={workout:w,index:0,remaining:w.exercises[0].seconds,paused:false,timer:null};speak(`Mission begins. ${w.exercises[0].name}`);tickStart();render()}
-function tickStart(){clearInterval(state.player?.timer);state.player.timer=setInterval(()=>{if(!state.player||state.player.paused)return;state.player.remaining--;if(state.player.remaining===10)speak("Ten seconds");if(state.player.remaining<=0)nextExercise();else render()},1000)}
-function nextExercise(){const p=state.player;if(!p)return;if(p.index>=p.workout.exercises.length-1){clearInterval(p.timer);const key=`${state.week}-${state.day}`;if(!state.completed.includes(key))state.completed.push(key);save();speak("Mission complete");state.player=null;alert("MISSION COMPLETE");if(state.day<6)state.day++;else{state.day=1;state.week=Math.min(12,state.week+1)}save();render();return}p.index++;p.remaining=p.workout.exercises[p.index].seconds;if(state.vibration&&navigator.vibrate)navigator.vibrate(120);speak(`Next exercise. ${p.workout.exercises[p.index].name}`);render()}
-function wire(){document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});document.querySelectorAll("[data-week]").forEach(b=>b.onclick=()=>{state.week=Number(b.dataset.week);save();render()});const start=document.getElementById("start");if(start)start.onclick=startPlayer;const pause=document.getElementById("pause");if(pause)pause.onclick=()=>{state.player.paused=!state.player.paused;render()};const skip=document.getElementById("skip");if(skip)skip.onclick=nextExercise;const back=document.getElementById("back");if(back)back.onclick=()=>{if(state.player.index>0){state.player.index--;state.player.remaining=state.player.workout.exercises[state.player.index].seconds;render()}};const exit=document.getElementById("exit");if(exit)exit.onclick=()=>{clearInterval(state.player.timer);state.player=null;render()};const notes=document.getElementById("notes");if(notes)notes.oninput=e=>{state.notes=e.target.value;save()};const sound=document.getElementById("sound");if(sound)sound.onchange=e=>{state.sound=e.target.checked;save()};const vibration=document.getElementById("vibration");if(vibration)vibration.onchange=e=>{state.vibration=e.target.checked;save()};const reset=document.getElementById("reset");if(reset)reset.onclick=()=>{if(confirm("Reset all progress?")){localStorage.clear();location.reload()}}}
+function startPlayer(){
+  const w=currentWorkout();
+  state.player={workout:w,index:0,round:1,totalRounds:2,remaining:w.exercises[0].seconds,paused:false,timer:null,phase:"work",restDuration:15};
+  speak(`Mission begins in 3, 2, 1. ${w.exercises[0].name}`);
+  tickStart();
+  render();
+}
+function tickStart(){
+  clearInterval(state.player?.timer);
+  state.player.timer=setInterval(()=>{
+    if(!state.player||state.player.paused)return;
+    state.player.remaining--;
+    if(state.player.remaining===10&&state.player.phase==="work")speak("Ten seconds");
+    if(state.player.remaining===3)speak("3");
+    if(state.player.remaining===2)speak("2");
+    if(state.player.remaining===1)speak("1");
+    if(state.player.remaining<=0)advancePhase();
+    else render();
+  },1000);
+}
+function advancePhase(){
+  const p=state.player;
+  if(!p)return;
+  if(p.phase==="work"){
+    const lastExercise=p.index>=p.workout.exercises.length-1;
+    const lastRound=p.round>=p.totalRounds;
+    if(lastExercise&&lastRound){finishMission();return}
+    p.phase="rest";
+    p.remaining=lastExercise?30:p.restDuration;
+    speak(lastExercise?`Round ${p.round} complete. Rest 30 seconds.`:"Rest");
+    if(state.vibration&&navigator.vibrate)navigator.vibrate(120);
+    render();
+    return;
+  }
+  if(p.index>=p.workout.exercises.length-1){p.round++;p.index=0}else{p.index++}
+  p.phase="work";
+  p.remaining=p.workout.exercises[p.index].seconds;
+  speak(`Round ${p.round}. ${p.workout.exercises[p.index].name}`);
+  render();
+}
+function finishMission(){
+  const p=state.player;
+  clearInterval(p.timer);
+  const key=`${state.week}-${state.day}`;
+  if(!state.completed.includes(key))state.completed.push(key);
+  save();
+  speak("Mission complete");
+  state.player=null;
+  alert("MISSION COMPLETE");
+  if(state.day<6)state.day++;else{state.day=1;state.week=Math.min(12,state.week+1)}
+  save();
+  render();
+}
+function skipCurrent(){advancePhase()}
+function wire(){document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});document.querySelectorAll("[data-week]").forEach(b=>b.onclick=()=>{state.week=Number(b.dataset.week);save();render()});const start=document.getElementById("start");if(start)start.onclick=startPlayer;const pause=document.getElementById("pause");if(pause)pause.onclick=()=>{state.player.paused=!state.player.paused;speak(state.player.paused?"Exercise paused":"Exercise resumed");render()};const skip=document.getElementById("skip");if(skip)skip.onclick=skipCurrent;const back=document.getElementById("back");if(back)back.onclick=()=>{if(state.player.index>0){state.player.index--;state.player.remaining=state.player.workout.exercises[state.player.index].seconds;render()}};const details=document.getElementById("details");if(details)details.onclick=()=>document.getElementById("coaching")?.scrollIntoView({behavior:"smooth"});
+const exit=document.getElementById("exit");if(exit)exit.onclick=()=>{if(confirm("Stop this mission? It will not be marked complete.")){clearInterval(state.player.timer);state.player=null;render()}};const notes=document.getElementById("notes");if(notes)notes.oninput=e=>{state.notes=e.target.value;save()};const sound=document.getElementById("sound");if(sound)sound.onchange=e=>{state.sound=e.target.checked;save()};const vibration=document.getElementById("vibration");if(vibration)vibration.onchange=e=>{state.vibration=e.target.checked;save()};const reset=document.getElementById("reset");if(reset)reset.onclick=()=>{if(confirm("Reset all progress?")){localStorage.clear();location.reload()}}}
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js"));
 render();
